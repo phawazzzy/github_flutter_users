@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'services/users.dart';
 void main() {
   runApp(MyApp());
 }
@@ -36,7 +36,20 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-class UsersList extends StatelessWidget {
+class UsersList extends StatefulWidget {
+  @override
+  _UsersListState createState() => _UsersListState();
+}
+
+class _UsersListState extends State<UsersList> {
+
+  UserModel userModel = UserModel();
+  @override
+  void initState() {
+    super.initState();
+    userModel.getUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,7 +73,9 @@ class UsersList extends StatelessWidget {
                   subtitle: Text('user location'),
                   trailing: FlatButton(
                     padding: EdgeInsets.all(0),
-                    onPressed: () {},
+                    onPressed: () {
+                      userModel.getUsers();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
