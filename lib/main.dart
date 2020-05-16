@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'services/users.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'webviewer.dart';
 
 enum Status { Updating, Fetched, Error }
 
@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Github users',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+//        primarySwatch: Colors.blue,
+//        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: UsersList(),
     );
@@ -65,14 +65,14 @@ class _UsersListState extends State<UsersList> {
     _fetchUsers();
   }
 
-  _launchURL(url) async {
-//    const url = 'https://flutter.dev';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+//  _launchURL(url) async {
+////    const url = 'https://flutter.dev';
+//    if (await canLaunch(url)) {
+//      await launch(url);
+//    } else {
+//      throw 'Could not launch $url';
+//    }
+//  }
 
   Widget _buildUserList() {
     return Container(
@@ -103,9 +103,10 @@ class _UsersListState extends State<UsersList> {
                     padding: EdgeInsets.all(0),
                     onPressed: () {
 //                      _launchURL(myUsers[index].profileLink);
-                      String link = myUsers[index].profileLink;
+                      profileLink = myUsers[index].profileLink;
+                      userName = myUsers[index].userName;
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return WebViewer(url: link,);
+                        return WebViewer(url: profileLink, userName: userName,);
                       }));
                     },
                     child: Container(
@@ -151,11 +152,11 @@ class _UsersListState extends State<UsersList> {
 
   Widget _buildUpdating() {
     return Container(
-      color: Colors.grey,
+      color: Colors.white,
       child: Center(
-        child: SpinKitWave(
-          color: Colors.white,
-          size: 50.0,
+        child: SpinKitDoubleBounce(
+          color: Colors.purple,
+          size: 70.0,
           duration: Duration(seconds: 2),
         ),
       ),
@@ -169,7 +170,7 @@ class _UsersListState extends State<UsersList> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('An Error occurred'),
+            Text('An Error occurred', style: TextStyle(color: Colors.red),),
             FlatButton(
               onPressed: _retry,
               child: Text('retry'),
@@ -205,35 +206,6 @@ class _UsersListState extends State<UsersList> {
   }
 }
 
-class WebViewer extends StatefulWidget {
-  final String url;
-  WebViewer({this.url});
 
-  @override
-  _WebViewerState createState() => _WebViewerState(url);
-}
 
-class _WebViewerState extends State<WebViewer> {
-  var _url;
-  final _key = UniqueKey();
 
-  _WebViewerState(this._url);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: WebviewScaffold(
-              url: _url,
-//              appBar: AppBar(
-//                title: Text('webviewer'),
-//              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
