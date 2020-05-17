@@ -2,6 +2,9 @@
 
 A new Flutter application. This is an app that list the people who has flutter project in their repo
 
+Gif
+![gif](https://github.com/phawazzzy/github_flutter_users/blob/master/githubuser.gif)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
