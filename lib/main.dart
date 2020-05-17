@@ -4,6 +4,8 @@ import 'services/users.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'webviewer.dart';
+import 'package:infinite_listview/infinite_listview.dart';
+import 'example.dart';
 
 enum Status { Updating, Fetched, Error }
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 //        primarySwatch: Colors.blue,
 //        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+          ),
       home: UsersList(),
     );
   }
@@ -80,7 +82,7 @@ class _UsersListState extends State<UsersList> {
         children: <Widget>[
           Expanded(
             child: ListView.separated(
-              shrinkWrap: true,
+//              shrinkWrap: true,
               itemCount: myUsers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
@@ -105,8 +107,12 @@ class _UsersListState extends State<UsersList> {
 //                      _launchURL(myUsers[index].profileLink);
                       profileLink = myUsers[index].profileLink;
                       userName = myUsers[index].userName;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return WebViewer(url: profileLink, userName: userName,);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return WebViewer(
+                          url: profileLink,
+                          userName: userName,
+                        );
                       }));
                     },
                     child: Container(
@@ -168,12 +174,24 @@ class _UsersListState extends State<UsersList> {
       color: Colors.grey,
       child: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+//          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('An Error occurred', style: TextStyle(color: Colors.red),),
-            FlatButton(
-              onPressed: _retry,
-              child: Text('retry'),
+            Text(
+              'An Error occurred',
+              style: TextStyle(color: Colors.red),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.refresh, size: 50.0, color: Colors.teal,),
+                    onPressed: () {
+                      _retry();
+                    }),
+                SizedBox(width: 20,),
+                Text('retry'),
+              ],
             )
           ],
         ),
@@ -200,12 +218,15 @@ class _UsersListState extends State<UsersList> {
           style: TextStyle(fontFamily: 'nunito'),
         ),
         backgroundColor: Color(0xFF2F3035),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                _retry();
+              })
+        ],
       ),
       body: _determineChild(),
     );
   }
 }
-
-
-
-
